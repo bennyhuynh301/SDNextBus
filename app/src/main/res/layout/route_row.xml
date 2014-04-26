@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:padding="5dip" >
+
+    <TextView
+        android:id="@+id/bus_icon"
+        android:layout_width="52dip"
+        android:layout_height="fill_parent"
+        android:layout_marginRight="6dip"
+        android:layout_centerVertical="true"
+        android:background="#ffff254c"
+        android:textColor="#ffffff"
+        android:padding="1dp"
+        android:textSize="16sp"
+        android:text="Number"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/bus_direction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="Bus direction"
+        android:textSize="16sp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/bus_icon" />
+
+    <TextView
+        android:id="@+id/bus_arrival_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time"
+        android:textSize="16sp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="6dip"
+        android:textStyle="bold"/>
+
+</RelativeLayout>
