@@ -1,5 +1,6 @@
 package com.phuchaihuynh.sdnextbus.realgtfs;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -16,22 +17,33 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = "DatabaseHelper";
+    private static final String TAG = "BusStopsDatabaseHelper";
+
+    private static final int DATABASE_VERSION = 1;
 
     //The Android's default system path of your application database.
     private static String DB_PATH = "/data/data/com.phuchaihuynh.sdnextbus.app/databases/";
     private static String DB_NAME = "SanDiegoBusStops.sqlite";
-    private SQLiteDatabase myDataBase;
+    private static String MY_DATABASE = DB_PATH + DB_NAME;
     private final Context myContext;
+
+    private static final String TABLE_FAVORITE = "favorites";
+    private static final String KEY_ID = "_id";
+    private static final String KEY_BUS_STOP_ID = "bus_stop_id";
+    private static final String KEY_TROLLEY_STOP_ID = "trolley_stop_id";
+    private static final String CREATE_TABLE_FAVORITE = "CREATE TABLE "
+            + TABLE_FAVORITE + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_BUS_STOP_ID + " INTEGER,"
+            + KEY_TROLLEY_STOP_ID + " INTEGER" + ")";
 
     /**
      * Constructor
      * Takes and keeps a reference of the passed context in order to access to the application assets and resources.
      */
-    public DatabaseHelper(Context context) {
-        super(context, DB_NAME, null, 1);
+    public BusStopsDatabaseHelper(Context context) {
+        super(context, DB_NAME, null, DATABASE_VERSION);
         this.myContext = context;
     }
 
@@ -47,9 +59,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else{
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
-            this.getReadableDatabase();
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.CREATE_IF_NECESSARY);
             try {
                 copyDataBase();
+                db.execSQL(CREATE_TABLE_FAVORITE);
+                db.close();
             }
             catch (IOException e) {
                 throw new Error("Error copying database");
@@ -63,8 +77,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private boolean checkDataBase(){
         SQLiteDatabase checkDB;
         try{
-            String myPath = DB_PATH + DB_NAME;
-            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+            checkDB = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
         }
         catch(SQLiteException e){
             //database does't exist yet.
@@ -86,10 +99,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //Open your local db as the input stream
         Log.d(TAG, "COPYING DATABASE FROM ASSETS FOLDER");
         InputStream myInput = myContext.getAssets().open(DB_NAME);
-        // Path to the just created empty db
-        String outFileName = DB_PATH + DB_NAME;
         //Open the empty db as the output stream
-        OutputStream myOutput = new FileOutputStream(outFileName);
+        OutputStream myOutput = new FileOutputStream(MY_DATABASE);
         //transfer bytes from the inputfile to the outputfile
         byte[] buffer = new byte[1024];
         int length;
@@ -104,15 +115,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void openDataBase() throws SQLException {
         //Open the database
-        String myPath = DB_PATH + DB_NAME;
-        myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+        SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
     }
 
     @Override
     public synchronized void close() {
-        if(myDataBase != null)
-            myDataBase.close();
-        super.close();
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READWRITE);
+        if (db != null && db.isOpen()) {
+            db.close();
+        }
     }
 
     @Override
@@ -121,13 +132,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
+    // -------------"Favorites Table Methods"---------------------//
+    public long createFavorite(long bus_stop_id, long trolley_stop_id) {
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READWRITE);
+        ContentValues values = new ContentValues();
+        values.put(KEY_BUS_STOP_ID, bus_stop_id);
+        values.put(KEY_TROLLEY_STOP_ID, trolley_stop_id);
+        long id = db.insert(TABLE_FAVORITE, null, values);
+        db.close();
+        return id;
+    }
+
+    public void deleteFavorite(long id) {
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READWRITE);
+        db.delete(TABLE_FAVORITE, KEY_ID + " = ?", new String[] {String.valueOf(id)});
+        db.close();
+    }
+
+    public List<Long> getAllFavorites() {
+        List<Long> favors = new ArrayList<Long>();
+        String selectQuery = "SELECT _id FROM " + TABLE_FAVORITE;
+        Log.d(TAG, selectQuery);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c.moveToFirst()) {
+            do {
+                favors.add(c.getLong(c.getColumnIndex(KEY_ID)));
+            } while (c.moveToNext());
+        }
+        c.close();
+        db.close();
+        return favors;
+    }
+
+    // -------------"Transports Table Methods"-------------------//
     public List<String> getTransportDirection(String transportTable, String transportRoute) {
         List<String> directions = new ArrayList<String>();
         String[] columns = {"trip_headsign"};
         String selection = "route = " + "'" + transportRoute + "'";
         String query = SQLiteQueryBuilder.buildQueryString(true, transportTable, columns, selection, null, null, null, null);
         Log.d(TAG, "Get transport direction query: " + query);
-        Cursor c = myDataBase.rawQuery(query, null, null);
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
+        Cursor c = db.rawQuery(query, null, null);
         if (c.moveToFirst()) {
             do {
                 directions.add(c.getString(c.getColumnIndex("trip_headsign")));
@@ -135,6 +181,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             while (c.moveToNext());
         }
         c.close();
+        db.close();
         return directions;
     }
 
@@ -144,7 +191,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selection = "route = " + "'" + transportRoute + "' and trip_headsign = " + "'" + transportDirection + "'";
         String query = SQLiteQueryBuilder.buildQueryString(false,transportTable,columns,selection,null,null,null,null);
         Log.d(TAG, "Get transport stops query: " + query);
-        Cursor c = myDataBase.rawQuery(query,null,null);
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
+        Cursor c = db.rawQuery(query, null, null);
         if (c.moveToFirst()) {
             do {
                 stops.add(c.getString(c.getColumnIndex("stop_name")));
@@ -152,6 +200,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             while (c.moveToNext());
         }
         c.close();
+        db.close();
         return stops;
     }
 
@@ -162,11 +211,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "' and stop_name = " + "'" + transportStop + "'";
         String query = SQLiteQueryBuilder.buildQueryString(false,transportTable,columes,selection,null,null,null,null);
         Log.d(TAG, "Get transport stop id: " + query);
-        Cursor c = myDataBase.rawQuery(query,null,null);
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
+        Cursor c = db.rawQuery(query, null, null);
         String stop_id = "";
         if (c.moveToFirst()) {
             stop_id = c.getString(c.getColumnIndex("stop_id"));
         }
+        c.close();
+        db.close();
         return stop_id;
+    }
+
+    public long getId(String transportTable, String stop_id) {
+        String[] columes = {"_id"};
+        String selection = "stop_id = " + "'" + stop_id + "'";
+        String query = SQLiteQueryBuilder.buildQueryString(false,transportTable,columes,selection,null,null,null,null);
+        Log.d(TAG, "Get transport row id: " + query);
+        long id = -1;
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
+        Cursor c = db.rawQuery(query, null, null);
+        if (c.moveToFirst()) {
+            id = c.getLong(c.getColumnIndex(KEY_ID));
+        }
+        c.close();
+        db.close();
+        return id;
     }
 }

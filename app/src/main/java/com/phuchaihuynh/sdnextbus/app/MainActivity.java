@@ -6,13 +6,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 
 import com.phuchaihuynh.sdnextbus.adapter.TabsPagerAdapter;
-import com.phuchaihuynh.sdnextbus.realgtfs.DatabaseHelper;
+import com.phuchaihuynh.sdnextbus.realgtfs.BusStopsDatabaseHelper;
 
 import java.io.IOException;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+
+    private static final String TAG = "MainActivity";
 
     private ViewPager mViewPager;
     private TabsPagerAdapter mAdapter;
@@ -58,8 +61,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         });
 
         // Create a database for the app
-        DatabaseHelper mDbHelper = new DatabaseHelper(this);
+        BusStopsDatabaseHelper mDbHelper = new BusStopsDatabaseHelper(this);
         try {
+            Log.d(TAG, "Create application database");
             mDbHelper.createDataBase();
             mDbHelper.openDataBase();
             mDbHelper.close();

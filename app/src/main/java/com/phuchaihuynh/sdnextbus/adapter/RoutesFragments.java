@@ -17,14 +17,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.phuchaihuynh.sdnextbus.app.R;
-import com.phuchaihuynh.sdnextbus.realgtfs.DatabaseHelper;
+import com.phuchaihuynh.sdnextbus.realgtfs.BusStopsDatabaseHelper;
 import com.phuchaihuynh.sdnextbus.realgtfs.GTFSRequest;
 import com.phuchaihuynh.sdnextbus.realgtfs.RouteModel;
 import com.phuchaihuynh.sdnextbus.realgtfs.RoutesParser;
@@ -53,8 +55,9 @@ public class RoutesFragments extends Fragment {
     private TextView timeTextView;
     private TextView updateTextView;
     private ProgressBar loadingIcon;
+    private CheckBox favoriteCheckbox;
 
-    private DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+    private BusStopsDatabaseHelper dbHelper = new BusStopsDatabaseHelper(getActivity());
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState) {
@@ -75,6 +78,9 @@ public class RoutesFragments extends Fragment {
         routeTextView = (TextView) rootView.findViewById(R.id.transport_icon);
         timeTextView = (TextView) rootView.findViewById(R.id.transport_time_text);
         updateTextView = (TextView) rootView.findViewById(R.id.last_updated_text);
+
+        favoriteCheckbox = (CheckBox) rootView.findViewById(R.id.favorite_stop_checkbox);
+        favoriteCheckbox.setOnClickListener(favoriteCheckBoxListener);
 
         loadingIcon = (ProgressBar) rootView.findViewById(R.id.loading_icon);
 
@@ -112,14 +118,35 @@ public class RoutesFragments extends Fragment {
         (new AsyncCallWS()).execute(stopId);
     }
 
+    private final CheckBox.OnClickListener favoriteCheckBoxListener = new CheckBox.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            long id = dbHelper.getId(transportTable,stopId);
+            if (((CheckBox) v).isChecked()) {
+                if (transportType.equals("Bus")) {
+                    String text = "Bus stop #" + stopId + "is added to favorite";
+                    Toast.makeText(v.getContext(), text, Toast.LENGTH_LONG).show();
+                    dbHelper.createFavorite(id, -1);
+                }
+                else {
+                    String text = "Trolley stop #" + stopId + "is added to favorite";
+                    Toast.makeText(v.getContext(), text, Toast.LENGTH_LONG).show();
+                    dbHelper.createFavorite(-1, id);
+                }
+            }
+            else {
+                String text = "Bus stop #" + stopId + "is removed from favorite";
+                Toast.makeText(v.getContext(),text,Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
     private final Button.OnClickListener searchOnClickedListener = new Button.OnClickListener() {
 
         @Override
         public void onClick(View view) {
             try {
-                dbHelper.openDataBase();
                 stopId = dbHelper.getTransportStopId(transportTable,transportRoute,transportDirection,transportStop);
-                dbHelper.close();
                 stopIdTextView.setText("Stop No. " + stopId);
                 routeTextView.setText(transportRoute.toUpperCase());
                 if (transportRoute.equals("blue")) {
@@ -174,12 +201,10 @@ public class RoutesFragments extends Fragment {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             transportRoute = parent.getItemAtPosition(position).toString().toLowerCase();
             try {
-                dbHelper.openDataBase();
                 List<String> directions = dbHelper.getTransportDirection(transportTable, transportRoute);
                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, directions);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 transportDirectionSpinner.setAdapter(dataAdapter);
-                dbHelper.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -197,12 +222,10 @@ public class RoutesFragments extends Fragment {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             transportDirection = parent.getItemAtPosition(position).toString();
             try {
-                dbHelper.openDataBase();
                 List<String> stops = dbHelper.getTransportStops(transportTable, transportRoute, transportDirection);
                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, stops);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 transportStopSpinner.setAdapter(dataAdapter);
-                dbHelper.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
