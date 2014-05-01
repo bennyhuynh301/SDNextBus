@@ -9,7 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import com.phuchaihuynh.sdnextbus.adapter.TabsPagerAdapter;
-import com.phuchaihuynh.sdnextbus.realgtfs.BusStopsDatabaseHelper;
+import com.phuchaihuynh.sdnextbus.utils.BusStopsDatabaseHelper;
 
 import java.io.IOException;
 

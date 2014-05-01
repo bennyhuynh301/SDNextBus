@@ -16,9 +16,9 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.phuchaihuynh.sdnextbus.app.R;
-import com.phuchaihuynh.sdnextbus.realgtfs.GTFSRequest;
-import com.phuchaihuynh.sdnextbus.realgtfs.RouteModel;
-import com.phuchaihuynh.sdnextbus.realgtfs.RoutesParser;
+import com.phuchaihuynh.sdnextbus.utils.GTFSRequest;
+import com.phuchaihuynh.sdnextbus.utils.RouteModel;
+import com.phuchaihuynh.sdnextbus.utils.RoutesParser;
 
 import java.util.ArrayList;
 
