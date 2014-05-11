@@ -11,20 +11,20 @@ import android.widget.TextView;
 import com.phuchaihuynh.sdnextbus.app.R;
 import com.phuchaihuynh.sdnextbus.utils.RouteModel;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class RoutesListAdapter extends ArrayAdapter<RouteModel> {
 
     private final Activity context;
-    private final ArrayList<RouteModel> values;
+    private final List<RouteModel> values;
 
     static class ViewHolder {
-        public TextView icon;
-        public TextView direction;
-        public TextView time;
+        TextView icon;
+        TextView direction;
+        TextView time;
     }
 
-    public RoutesListAdapter(Activity context, ArrayList<RouteModel> values) {
+    public RoutesListAdapter(Activity context, List<RouteModel> values) {
         super(context, R.layout.route_row, values);
         this.context = context;
         this.values = values;

@@ -24,6 +24,6 @@ public class RouteModel {
     }
 
     public String toString() {
-        return "[" + route + ": to " + direction + " in " + arrivalTime + " mins]";
+        return "[" + this.route + ": to " + this.direction + " in " + this.arrivalTime + " mins]";
     }
 }

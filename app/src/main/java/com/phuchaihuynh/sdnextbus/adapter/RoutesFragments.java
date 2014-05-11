@@ -122,6 +122,7 @@ public class RoutesFragments extends Fragment {
         @Override
         public void onClick(View v) {
             long id = dbHelper.getId(transportTable,stopId);
+
             if (((CheckBox) v).isChecked()) {
                 if (transportType.equals("Bus")) {
                     String text = "Bus stop #" + stopId + "is added to favorite";
@@ -135,8 +136,16 @@ public class RoutesFragments extends Fragment {
                 }
             }
             else {
-                String text = "Bus stop #" + stopId + "is removed from favorite";
-                Toast.makeText(v.getContext(),text,Toast.LENGTH_LONG).show();
+                if (transportType.equals("Bus")) {
+                    String text = "Bus stop #" + stopId + "is removed from favorite";
+                    Toast.makeText(v.getContext(), text, Toast.LENGTH_LONG).show();
+                    dbHelper.deleteFavorite(dbHelper.getFavBusRowId(id));
+                }
+                else {
+                    String text = "Trolley stop #" + stopId + "is removed from favorite";
+                    Toast.makeText(v.getContext(), text, Toast.LENGTH_LONG).show();
+                    dbHelper.deleteFavorite(dbHelper.getFavTrolleyRowId(id));
+                }
             }
         }
     };
@@ -161,6 +170,26 @@ public class RoutesFragments extends Fragment {
                 else {
                     routeTextView.setBackgroundColor(Color.parseColor("#ffff254c"));
                 }
+
+                long id = dbHelper.getId(transportTable,stopId);
+                if (transportType.equals("Bus")) {
+                    if (dbHelper.isBusFavorite(id)) {
+                        favoriteCheckbox.setChecked(true);
+                    }
+                    else {
+                        favoriteCheckbox.setChecked(false);
+
+                    }
+                }
+                else if (transportType.equals("Trolley")) {
+                    if (dbHelper.isTrolleyFavorite(id)) {
+                        favoriteCheckbox.setChecked(true);
+                    }
+                    else {
+                        favoriteCheckbox.setChecked(false);
+                    }
+                }
+
                 searchResultLt.setVisibility(View.VISIBLE);
                 (new AsyncCallWS()).execute(stopId);
 
