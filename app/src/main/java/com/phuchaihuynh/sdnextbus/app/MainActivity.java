@@ -1,7 +1,11 @@
 package com.phuchaihuynh.sdnextbus.app;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.database.SQLException;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -9,19 +13,26 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import com.phuchaihuynh.sdnextbus.adapter.TabsPagerAdapter;
-import com.phuchaihuynh.sdnextbus.utils.BusStopsDatabaseHelper;
+import com.phuchaihuynh.sdnextbus.database.BusStopsDatabaseHelper;
+import com.phuchaihuynh.sdnextbus.fragments.FavoriteTransportDialog;
+import com.phuchaihuynh.sdnextbus.fragments.FavoritesFragment;
+import com.phuchaihuynh.sdnextbus.models.FavoriteTransportModel;
 
 import java.io.IOException;
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, FavoritesFragment.OnFavoriteTransportSelectedListener {
 
     private static final String TAG = "MainActivity";
+    private static final String DATABASE_NAME = "SanDiegoBusStops.sqlite";
 
     private ViewPager mViewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
 
     private String[] tabs = {"Favorites", "Routes" ,"Bus Stops"};
+    private static final int FAVORITES = 0;
+    private static final int ROUTES = 1;
+    private static final int BUSSTOPS = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +76,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         try {
             Log.d(TAG, "Create application database");
             mDbHelper.createDataBase();
+            Log.d(TAG, "Database path: " + this.getDatabasePath(DATABASE_NAME));
+            //Test the database
             mDbHelper.openDataBase();
             mDbHelper.close();
         }
@@ -89,5 +102,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 
+    }
+
+    @Override
+    public void setOnFavoriteTransportClick(FavoriteTransportModel transportModel, String transportType) {
+        FragmentManager fm = getSupportFragmentManager();
+        FavoriteTransportDialog fav_dialog = FavoriteTransportDialog.newInstance(transportType, transportModel.getRoute(),
+                transportModel.getDirection(), transportModel.getStopName(), transportModel.getStopId());
+        fav_dialog.show(fm, "fav_dialog");
     }
 }

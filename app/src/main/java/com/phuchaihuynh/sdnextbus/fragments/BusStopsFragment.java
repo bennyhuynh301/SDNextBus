@@ -1,4 +1,4 @@
-package com.phuchaihuynh.sdnextbus.adapter;
+package com.phuchaihuynh.sdnextbus.fragments;
 
 import android.os.AsyncTask;
 import android.os.Build;
@@ -15,9 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.phuchaihuynh.sdnextbus.adapter.RoutesListAdapter;
 import com.phuchaihuynh.sdnextbus.app.R;
 import com.phuchaihuynh.sdnextbus.utils.GTFSRequest;
-import com.phuchaihuynh.sdnextbus.utils.RouteModel;
+import com.phuchaihuynh.sdnextbus.models.RouteModel;
 import com.phuchaihuynh.sdnextbus.utils.RoutesParser;
 
 import java.util.ArrayList;

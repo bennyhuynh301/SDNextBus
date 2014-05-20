@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <RelativeLayout
+            android:id="@+id/fav_search_result_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_margin="5dip"
+            android:padding="5dp"
+            android:layout_alignParentTop="true"
+            android:background="#ffffff"
+            android:visibility="visible">
+
+        <LinearLayout
+                android:id="@+id/stop_info_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <TextView
+                    android:id="@+id/stop_name_text_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:text="Transport Stop Name"
+                    android:textColor="#000000"/>
+
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stop ID: #"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/stop_id_text_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Transport Stop ID"
+                    android:textSize="14sp"
+                    android:paddingTop="2dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+                android:id="@+id/transport_icon_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="#ffff254c"
+                android:textColor="#ffffff"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:textSize="20sp"
+                android:text="Route"
+                android:gravity="center"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/stop_info_dialog"
+                android:layout_marginTop="5dp"
+                android:background="#ff0f53e6">
+        </LinearLayout>
+
+        <ProgressBar
+                android:id="@+id/loading_icon_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
+
+        <TextView
+                android:id="@+id/transport_time_text_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Time"
+                android:textColor="#000000"
+                android:textSize="43sp"
+                android:textStyle="bold"
+                android:visibility="invisible"/>
+
+        <LinearLayout
+                android:id="@+id/transport_direction_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/refresh_icon_dialog"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Direction: "
+                    android:textStyle="bold"/>
+            <TextView
+                    android:id="@+id/transport_direction_text_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="........"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"/>
+        </LinearLayout>
+
+        <ImageButton
+                android:id="@+id/refresh_icon_dialog"
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_action_refresh"
+                android:background="#ffffff"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true" />
+    </RelativeLayout>
+</LinearLayout>

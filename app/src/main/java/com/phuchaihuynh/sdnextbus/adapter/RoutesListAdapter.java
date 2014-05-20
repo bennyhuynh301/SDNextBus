@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.phuchaihuynh.sdnextbus.app.R;
-import com.phuchaihuynh.sdnextbus.utils.RouteModel;
+import com.phuchaihuynh.sdnextbus.models.RouteModel;
 
 import java.util.List;
 

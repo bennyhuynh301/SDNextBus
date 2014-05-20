@@ -10,12 +10,13 @@
     <string name="search_textview">Enter the bus stop code</string>
     <string name="stop_info">Stop Information</string>
     <string name="bus_stop_name"></string>
-    <string name="bus_stop_id"> </string>
+    <string name="bus_stop_id"></string>
     <string name="next_arrival">Next arrival</string>
-    <string name="select_transport_type">Select Transport Type</string>
-    <string name="select_route">Select a route</string>
-    <string name="select_direction">Select direction</string>
-    <string name="select_stop">Select a stop</string>
+    <string name="select_transport_type">Transport Type</string>
+    <string name="select_route">Route</string>
+    <string name="select_direction">Direction</string>
+    <string name="select_stop">Stop Name</string>
+
     <string-array name="transport_type">
         <item>Bus</item>
         <item>Trolley</item>
@@ -26,39 +27,108 @@
         <item>Orange</item>
     </string-array>
     <string-array name="bus_routes">
-        <item>1</item><item>2</item> <item>3</item>
-        <item>4</item><item>5</item><item>6</item>
-        <item>7</item><item>8</item><item>9</item>
-        <item>10</item><item>11</item><item>13</item>
-        <item>14</item><item>15</item><item>18</item>
-        <item>20</item><item>25</item><item>27</item>
-        <item>28</item><item>30</item><item>31</item>
-        <item>35</item><item>41</item><item>44</item>
-        <item>50</item><item>83</item><item>84</item>
-        <item>88</item><item>105</item><item>115</item>
-        <item>120</item><item>150</item><item>201</item>
-        <item>202</item><item>204</item><item>210</item>
-        <item>701</item><item>703</item><item>704</item>
-        <item>705</item><item>707</item><item>709</item>
-        <item>712</item><item>810</item><item>815</item>
-        <item>816</item><item>820</item><item>832</item>
-        <item>833</item><item>834</item><item>844</item>
-        <item>845</item><item>848</item><item>850</item>
-        <item>851</item><item>854</item><item>855</item>
-        <item>856</item><item>860</item><item>864</item>
-        <item>870</item><item>871</item><item>872</item>
-        <item>874</item><item>875</item><item>880</item>
-        <item>888</item><item>891</item><item>892</item>
-        <item>894</item><item>901</item><item>904</item>
-        <item>905</item><item>906</item><item>907</item>
-        <item>916</item><item>917</item><item>921</item>
-        <item>923</item><item>928</item><item>929</item>
-        <item>932</item><item>933</item><item>934</item>
-        <item>936</item><item>950</item><item>955</item>
-        <item>960</item><item>961</item><item>962</item>
-        <item>963</item><item>964</item><item>965</item>
-        <item>967</item><item>968</item><item>972</item>
-        <item>973</item><item>978</item><item>979</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>18</item>
+        <item>20</item>
+        <item>25</item>
+        <item>27</item>
+        <item>28</item>
+        <item>30</item>
+        <item>31</item>
+        <item>35</item>
+        <item>41</item>
+        <item>44</item>
+        <item>50</item>
+        <item>83</item>
+        <item>84</item>
+        <item>88</item>
+        <item>105</item>
+        <item>115</item>
+        <item>120</item>
+        <item>150</item>
+        <item>201</item>
+        <item>202</item>
+        <item>204</item>
+        <item>210</item>
+        <item>701</item>
+        <item>703</item>
+        <item>704</item>
+        <item>705</item>
+        <item>707</item>
+        <item>709</item>
+        <item>712</item>
+        <item>810</item>
+        <item>815</item>
+        <item>816</item>
+        <item>820</item>
+        <item>832</item>
+        <item>833</item>
+        <item>834</item>
+        <item>844</item>
+        <item>845</item>
+        <item>848</item>
+        <item>850</item>
+        <item>851</item>
+        <item>854</item>
+        <item>855</item>
+        <item>856</item>
+        <item>860</item>
+        <item>864</item>
+        <item>870</item>
+        <item>871</item>
+        <item>872</item>
+        <item>874</item>
+        <item>875</item>
+        <item>880</item>
+        <item>888</item>
+        <item>891</item>
+        <item>892</item>
+        <item>894</item>
+        <item>901</item>
+        <item>904</item>
+        <item>905</item>
+        <item>906</item>
+        <item>907</item>
+        <item>916</item>
+        <item>917</item>
+        <item>921</item>
+        <item>923</item>
+        <item>928</item>
+        <item>929</item>
+        <item>932</item>
+        <item>933</item>
+        <item>934</item>
+        <item>936</item>
+        <item>950</item>
+        <item>955</item>
+        <item>960</item>
+        <item>961</item>
+        <item>962</item>
+        <item>963</item>
+        <item>964</item>
+        <item>965</item>
+        <item>967</item>
+        <item>968</item>
+        <item>972</item>
+        <item>973</item>
+        <item>978</item>
+        <item>979</item>
         <item>992</item>
     </string-array>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

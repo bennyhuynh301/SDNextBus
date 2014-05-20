@@ -1,0 +1,25 @@
+0. Change the fav icon to star icon (Done)
+1. Adding the arrival time to favorite fragments.(Consider threads) (Aborted)
+
+2. Fixing the bug in the Stops Fragments. (Fix the parser)
+3. Fixing the transition between the tabs.
+4. Double check the bus schedule.
+
+5. Write mocking server for the test.
+6. Adding the map to show bus stops around user location
+7. Adding the notification when the time is up based on user location
+8. Improve the UI
+9. Adding the widgets features
+10. Refactoring the code.
+11. Documentation the code
+
+12. Public the first version of the product
+13. Create the ads on the app
+
+14. Create the server to check the bus schedule change
+15. Write the script to parse the bus schedule
+
+16. Fix database notification immediately when the data set change
+17. Fav list onClicked
+
+18. Fix duplicated stop id (Done)

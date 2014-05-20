@@ -1,4 +1,4 @@
-package com.phuchaihuynh.sdnextbus.utils;
+package com.phuchaihuynh.sdnextbus.models;
 
 public class RouteModel {
     private String route;

@@ -1,4 +1,4 @@
-package com.phuchaihuynh.sdnextbus.adapter;
+package com.phuchaihuynh.sdnextbus.fragments;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,9 +26,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.phuchaihuynh.sdnextbus.app.R;
-import com.phuchaihuynh.sdnextbus.utils.BusStopsDatabaseHelper;
+import com.phuchaihuynh.sdnextbus.database.BusStopsDatabaseHelper;
 import com.phuchaihuynh.sdnextbus.utils.GTFSRequest;
-import com.phuchaihuynh.sdnextbus.utils.RouteModel;
+import com.phuchaihuynh.sdnextbus.models.RouteModel;
 import com.phuchaihuynh.sdnextbus.utils.RoutesParser;
 
 import java.util.List;
@@ -53,7 +53,6 @@ public class RoutesFragments extends Fragment {
     private TextView stopIdTextView;
     private TextView routeTextView;
     private TextView timeTextView;
-    private TextView updateTextView;
     private ProgressBar loadingIcon;
     private CheckBox favoriteCheckbox;
 
@@ -63,6 +62,7 @@ public class RoutesFragments extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState) {
 
         View rootView = inflater.inflate(R.layout.routes_fragment, container, false);
+
         transportTypeSpinner = (Spinner) rootView.findViewById(R.id.transport_type);
         transportRouteSpinner = (Spinner) rootView.findViewById(R.id.transport_route);
         transportDirectionSpinner = (Spinner) rootView.findViewById(R.id.transport_direction);
@@ -77,7 +77,6 @@ public class RoutesFragments extends Fragment {
         stopIdTextView = (TextView) rootView.findViewById(R.id.stop_id_text);
         routeTextView = (TextView) rootView.findViewById(R.id.transport_icon);
         timeTextView = (TextView) rootView.findViewById(R.id.transport_time_text);
-        updateTextView = (TextView) rootView.findViewById(R.id.last_updated_text);
 
         favoriteCheckbox = (CheckBox) rootView.findViewById(R.id.favorite_stop_checkbox);
         favoriteCheckbox.setOnClickListener(favoriteCheckBoxListener);
@@ -88,7 +87,7 @@ public class RoutesFragments extends Fragment {
         searchButton.setOnClickListener(searchOnClickedListener);
 
         refreshButton = (ImageButton) rootView.findViewById(R.id.refresh_icon);
-        refreshButton.setOnClickListener(searchOnClickedListener);
+        refreshButton.setOnClickListener(refreshOnClickedListener);
 
         return rootView;
     }
@@ -100,53 +99,80 @@ public class RoutesFragments extends Fragment {
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        getActivity().registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
     public void onStop(){
         super.onStop();
-        getActivity().unregisterReceiver(tickReceiver);
+        try {
+            getActivity().unregisterReceiver(tickReceiver);
+        }
+        catch (IllegalArgumentException e) {} //skip
     }
 
     private final BroadcastReceiver tickReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK)==0) {
-                update();
-            }
+        if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK)==0) {
+            update();
+        }
         }
     };
 
-    private void update() {
+    public void update() {
         (new AsyncCallWS()).execute(stopId);
     }
 
     private final CheckBox.OnClickListener favoriteCheckBoxListener = new CheckBox.OnClickListener(){
         @Override
         public void onClick(View v) {
-            long id = dbHelper.getId(transportTable,stopId);
+            long id = dbHelper.getId(transportTable,stopId,transportRoute);
 
             if (((CheckBox) v).isChecked()) {
                 if (transportType.equals("Bus")) {
-                    String text = "Bus stop #" + stopId + "is added to favorite";
+                    String text = "Bus stop #" + stopId + " is added to favorite";
                     Toast.makeText(v.getContext(), text, Toast.LENGTH_LONG).show();
                     dbHelper.createFavorite(id, -1);
                 }
                 else {
-                    String text = "Trolley stop #" + stopId + "is added to favorite";
+                    String text = "Trolley stop #" + stopId + " is added to favorite";
                     Toast.makeText(v.getContext(), text, Toast.LENGTH_LONG).show();
                     dbHelper.createFavorite(-1, id);
                 }
             }
             else {
                 if (transportType.equals("Bus")) {
-                    String text = "Bus stop #" + stopId + "is removed from favorite";
+                    String text = "Bus stop #" + stopId + " is removed from favorite";
                     Toast.makeText(v.getContext(), text, Toast.LENGTH_LONG).show();
                     dbHelper.deleteFavorite(dbHelper.getFavBusRowId(id));
                 }
                 else {
-                    String text = "Trolley stop #" + stopId + "is removed from favorite";
+                    String text = "Trolley stop #" + stopId + " is removed from favorite";
                     Toast.makeText(v.getContext(), text, Toast.LENGTH_LONG).show();
                     dbHelper.deleteFavorite(dbHelper.getFavTrolleyRowId(id));
                 }
             }
+        }
+    };
+
+    private final ImageButton.OnClickListener refreshOnClickedListener = new ImageButton.OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            update();
         }
     };
 
@@ -156,7 +182,7 @@ public class RoutesFragments extends Fragment {
         public void onClick(View view) {
             try {
                 stopId = dbHelper.getTransportStopId(transportTable,transportRoute,transportDirection,transportStop);
-                stopIdTextView.setText("Stop No. " + stopId);
+                stopIdTextView.setText("Stop No. #" + stopId);
                 routeTextView.setText(transportRoute.toUpperCase());
                 if (transportRoute.equals("blue")) {
                     routeTextView.setBackgroundColor(Color.BLUE);
@@ -171,7 +197,7 @@ public class RoutesFragments extends Fragment {
                     routeTextView.setBackgroundColor(Color.parseColor("#ffff254c"));
                 }
 
-                long id = dbHelper.getId(transportTable,stopId);
+                long id = dbHelper.getId(transportTable,stopId,transportRoute);
                 if (transportType.equals("Bus")) {
                     if (dbHelper.isBusFavorite(id)) {
                         favoriteCheckbox.setChecked(true);
@@ -306,14 +332,17 @@ public class RoutesFragments extends Fragment {
                 timeTextView.setVisibility(View.VISIBLE);
                 return;
             }
-            for (int i = 0; i < 2; i++ ) {
-                if (routes.get(i).getRoute().toLowerCase().equals(transportRoute)) {
-                    if (i == 0) {
-                        timeText += routes.get(i).getArrivalTime();
+            int count = 0;
+            for (RouteModel r : routes) {
+                if (r.getRoute().toLowerCase().equals(transportRoute)) {
+                    timeText += r.getArrivalTime();
+                    count++;
+                    if (count < 2) {
+                        timeText += ", ";
                     }
-                    else {
-                        timeText += ", " + routes.get(i).getArrivalTime();
-                    }
+                }
+                if (count == 2) {
+                    break;
                 }
             }
             timeText += " mins";

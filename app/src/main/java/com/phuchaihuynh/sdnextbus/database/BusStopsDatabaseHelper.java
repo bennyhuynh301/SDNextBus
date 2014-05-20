@@ -1,4 +1,4 @@
-package com.phuchaihuynh.sdnextbus.utils;
+package com.phuchaihuynh.sdnextbus.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
+import com.phuchaihuynh.sdnextbus.models.FavoriteTransportModel;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -65,7 +66,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         else{
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
-            SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+            SQLiteDatabase db = this.getReadableDatabase();
             try {
                 copyDataBase();
                 db.execSQL(CREATE_TABLE_FAVORITE);
@@ -119,17 +120,18 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         myInput.close();
     }
 
+    private SQLiteDatabase database;
     public void openDataBase() throws SQLException {
         //Open the database
-        SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
+        database = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
     }
 
     @Override
     public synchronized void close() {
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READWRITE);
-        if (db != null && db.isOpen()) {
-            db.close();
+        if (database != null) {
+            database.close();
         }
+        super.close();
     }
 
     @Override
@@ -157,8 +159,8 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
 
     public boolean isBusFavorite(long bus_id) {
         String selectQuery = "SELECT " + KEY_ID
-                + "FROM " + TABLE_FAVORITE
-                + "WHERE " + KEY_BUS_STOP_ID + " = " + bus_id;
+                + " FROM " + TABLE_FAVORITE
+                + " WHERE " + KEY_BUS_STOP_ID + " = " + bus_id;
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
         Log.d(TAG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
@@ -170,8 +172,8 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
 
     public boolean isTrolleyFavorite(long trolley_id) {
         String selectQuery = "SELECT " + KEY_ID
-                + "FROM " + TABLE_FAVORITE
-                + "WHERE " + KEY_TROLLEY_STOP_ID + " = " + trolley_id;
+                + " FROM " + TABLE_FAVORITE
+                + " WHERE " + KEY_TROLLEY_STOP_ID + " = " + trolley_id;
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
         Log.d(TAG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
@@ -183,8 +185,8 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
 
     public long getFavBusRowId(long bus_id) {
         String selectQuery = "SELECT " + KEY_ID
-                + "FROM " + TABLE_FAVORITE
-                + "WHERE " + KEY_BUS_STOP_ID + " = " + bus_id;
+                + " FROM " + TABLE_FAVORITE
+                + " WHERE " + KEY_BUS_STOP_ID + " = " + bus_id;
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
         Log.d(TAG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
@@ -199,8 +201,8 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
 
     public long getFavTrolleyRowId(long trolley_id) {
         String selectQuery = "SELECT " + KEY_ID
-                + "FROM " + TABLE_FAVORITE
-                + "WHERE " + KEY_BUS_STOP_ID + " = " + trolley_id;
+                + " FROM " + TABLE_FAVORITE
+                + " WHERE " + KEY_BUS_STOP_ID + " = " + trolley_id;
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
         Log.d(TAG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
@@ -216,8 +218,8 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<FavoriteTransportModel> getAllBusesFavorites() {
         ArrayList<FavoriteTransportModel> favors = new ArrayList<FavoriteTransportModel>();
         String selectQuery = "SELECT " + STOP_ID + ", " + STOP_NAME + ", " + ROUTE + ", " + DIRECTION
-                + "FROM " + TABLE_BUSES + ", " + TABLE_FAVORITE
-                + "WHERE " + TABLE_BUSES + "." + KEY_ID + " = " + TABLE_FAVORITE + "." + KEY_BUS_STOP_ID;
+                + " FROM " + TABLE_BUSES + ", " + TABLE_FAVORITE
+                + " WHERE " + TABLE_BUSES + "." + KEY_ID + " = " + TABLE_FAVORITE + "." + KEY_BUS_STOP_ID;
         Log.d(TAG, selectQuery);
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
         Cursor c = db.rawQuery(selectQuery, null);
@@ -240,8 +242,8 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<FavoriteTransportModel> getAllTrolleysFavorites() {
         ArrayList<FavoriteTransportModel> favors = new ArrayList<FavoriteTransportModel>();
         String selectQuery = "SELECT " + STOP_ID + ", " + STOP_NAME + ", " + ROUTE + ", " + DIRECTION
-                + "FROM " + TABLE_TROLLEYS + ", " + TABLE_FAVORITE
-                + "WHERE " + TABLE_TROLLEYS + "." + KEY_ID + " = " + TABLE_FAVORITE + "." + KEY_TROLLEY_STOP_ID;
+                + " FROM " + TABLE_TROLLEYS + ", " + TABLE_FAVORITE
+                + " WHERE " + TABLE_TROLLEYS + "." + KEY_ID + " = " + TABLE_FAVORITE + "." + KEY_TROLLEY_STOP_ID;
         Log.d(TAG, selectQuery);
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
         Cursor c = db.rawQuery(selectQuery, null);
@@ -338,9 +340,9 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         return stop_id;
     }
 
-    public long getId(String transportTable, String stop_id) {
+    public long getId(String transportTable, String stop_id, String transportRoute) {
         String[] columes = {KEY_ID};
-        String selection = STOP_ID + " = " + "'" + stop_id + "'";
+        String selection = STOP_ID + " = " + "'" + stop_id + "' and " + ROUTE + " = " + "'" + transportRoute +"'";
         String query = SQLiteQueryBuilder.buildQueryString(false,transportTable,columes,selection,null,null,null,null);
         Log.d(TAG, "Get transport row id: " + query);
         long id = -1;

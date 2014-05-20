@@ -1,11 +1,10 @@
-package com.phuchaihuynh.sdnextbus.utils;
+package com.phuchaihuynh.sdnextbus.models;
 
 public class FavoriteTransportModel {
     private String stopName;
     private String stopId;
     private String route;
     private String direction;
-    private String arriveTime;
 
     public void setStopName(String stopName) {
         this.stopName = stopName;
@@ -21,10 +20,6 @@ public class FavoriteTransportModel {
 
     public void setDirection(String direction) {
         this.direction = direction;
-    }
-
-    public void setArriveTime(String time) {
-        this.arriveTime = time;
     }
 
     public String getStopName() {
@@ -43,16 +38,11 @@ public class FavoriteTransportModel {
         return this.direction;
     }
 
-    public String getArrivalTime() {
-        return this.arriveTime;
-    }
-
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("[").append("route:").append(this.route)
+        sb.append("[").append("route:").append(this.route).append(":")
                 .append(this.stopName).append("(").append(this.stopId).append(")")
                 .append(":").append(this.direction)
-                .append(":").append(this.arriveTime)
                 .append("]");
         return sb.toString();
     }

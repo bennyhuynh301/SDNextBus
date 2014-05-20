@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.phuchaihuynh.sdnextbus.app.R;
-import com.phuchaihuynh.sdnextbus.utils.FavoriteTransportModel;
+import com.phuchaihuynh.sdnextbus.models.FavoriteTransportModel;
 
 import java.util.List;
 
@@ -23,7 +23,6 @@ public class FavoritesListAdapter extends ArrayAdapter<FavoriteTransportModel> {
         TextView stopName;
         TextView stopId;
         TextView direction;
-        TextView arrivalTime;
     }
 
     public FavoritesListAdapter(Activity context, List<FavoriteTransportModel> values) {
@@ -42,34 +41,26 @@ public class FavoritesListAdapter extends ArrayAdapter<FavoriteTransportModel> {
             viewHolder.stopName = (TextView) convertView.findViewById(R.id.fav_stop_name);
             viewHolder.stopId = (TextView) convertView.findViewById(R.id.fav_stop_id);
             viewHolder.direction = (TextView) convertView.findViewById(R.id.fav_direction);
-            viewHolder.arrivalTime = (TextView) convertView.findViewById(R.id.fav_bus_arrival_time);
             convertView.setTag(viewHolder);
         }
         ViewHolder holder = (ViewHolder) convertView.getTag();
         FavoriteTransportModel model = values.get(position);
-        holder.icon.setText(model.getRoute());
-        if (model.getRoute().equals("Blue")) {
+        holder.icon.setText(model.getRoute().toUpperCase());
+        if (model.getRoute().equals("blue")) {
             holder.icon.setBackgroundColor(Color.BLUE);
         }
-        else if (model.getRoute().equals("Green")) {
+        else if (model.getRoute().equals("green")) {
             holder.icon.setBackgroundColor(Color.GREEN);
         }
-        else if (model.getRoute().equals("Orange")) {
+        else if (model.getRoute().equals("orange")) {
             holder.icon.setBackgroundColor(Color.parseColor("#ffa500"));
         }
         else {
             holder.icon.setBackgroundColor(Color.parseColor("#ffff254c"));
         }
         holder.stopName.setText(model.getStopName());
-        holder.stopId.setText(model.getStopId());
-        holder.direction.setText("To: " + model.getDirection());
-        if (Integer.parseInt(model.getArrivalTime()) <= 2) {
-            holder.arrivalTime.setTextColor(Color.RED);
-        }
-        else {
-            holder.arrivalTime.setTextColor(Color.WHITE);
-        }
-        holder.arrivalTime.setText(model.getArrivalTime() + " mins");
+        holder.stopId.setText("Stop no. #" + model.getStopId());
+        holder.direction.setText("Direction: " + model.getDirection());
         return convertView;
     }
 }
