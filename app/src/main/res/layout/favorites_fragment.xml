@@ -5,63 +5,72 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#ff000000">
-
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.45">
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:text="Bus Stops"
-                android:textStyle="bold"
-                android:textAllCaps="true"
-                android:textSize="16sp"/>
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#FFFFFF"/>
-        <ListView
-                android:id="@+id/fav_bus_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-        </ListView>
-    </LinearLayout>
+        android:background="#333">
 
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.01">
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_margin="3dp"
+            android:background="#111">
 
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.45">
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:text="Trolley Stops"
-                android:textStyle="bold"
-                android:textAllCaps="true"
-                android:textSize="16sp"/>
         <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#FFFFFF"/>
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.4">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Bus Stops"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"/>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#FFFFFF"/>
+            <ListView
+                    android:id="@+id/fav_bus_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+            </ListView>
+        </LinearLayout>
 
-        <ListView
-                android:id="@+id/fav_trolley_list"
+        <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-        </ListView>
+                android:layout_height="0dp"
+                android:layout_weight="0.015">
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.46">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Trolley Stops"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"/>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#FFFFFF"/>
+
+            <ListView
+                    android:id="@+id/fav_trolley_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            </ListView>
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

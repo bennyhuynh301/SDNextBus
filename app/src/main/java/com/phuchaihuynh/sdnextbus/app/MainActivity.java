@@ -1,10 +1,8 @@
 package com.phuchaihuynh.sdnextbus.app;
 
-import android.app.Dialog;
-import android.app.DialogFragment;
+
 import android.database.SQLException;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -16,13 +14,18 @@ import com.phuchaihuynh.sdnextbus.adapter.TabsPagerAdapter;
 import com.phuchaihuynh.sdnextbus.database.BusStopsDatabaseHelper;
 import com.phuchaihuynh.sdnextbus.fragments.FavoriteTransportDialog;
 import com.phuchaihuynh.sdnextbus.fragments.FavoritesFragment;
+import com.phuchaihuynh.sdnextbus.fragments.RemoveFavoriteDialog;
+import com.phuchaihuynh.sdnextbus.fragments.RoutesFragment;
 import com.phuchaihuynh.sdnextbus.models.FavoriteTransportModel;
 
 import java.io.IOException;
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, FavoritesFragment.OnFavoriteTransportSelectedListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, FavoritesFragment.OnFavoriteTransportSelectedListener,
+                                        FavoritesFragment.OnFavoriteTransportLongSelectedListener,
+                                        RoutesFragment.OnFavoriteSelectedListener,
+                                        RemoveFavoriteDialog.OnRemoveFavoriteListener {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = MainActivity.class.getName();
     private static final String DATABASE_NAME = "SanDiegoBusStops.sqlite";
 
     private ViewPager mViewPager;
@@ -91,7 +94,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        mViewPager.setCurrentItem(tab.getPosition());
+        mViewPager.setCurrentItem(tab.getPosition(),false);
+
     }
 
     @Override
@@ -110,5 +114,27 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         FavoriteTransportDialog fav_dialog = FavoriteTransportDialog.newInstance(transportType, transportModel.getRoute(),
                 transportModel.getDirection(), transportModel.getStopName(), transportModel.getStopId());
         fav_dialog.show(fm, "fav_dialog");
+    }
+
+    @Override
+    public void setOnFavoriteTransportLongClick(FavoriteTransportModel transportModel, String transportType) {
+        FragmentManager fm = getSupportFragmentManager();
+        RemoveFavoriteDialog remove_fav_dialog = RemoveFavoriteDialog.newInstance(transportType, transportModel.getStopId(), transportModel.getRoute());
+        remove_fav_dialog.show(fm, "remove_fav_dialog");
+    }
+
+    @Override
+    public void onFavoriteCheck() {
+        mViewPager.getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void onFavoriteUncheck() {
+        mViewPager.getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRemoveClick() {
+        mViewPager.getAdapter().notifyDataSetChanged();
     }
 }

@@ -48,10 +48,10 @@ public class RoutesListAdapter extends ArrayAdapter<RouteModel> {
             holder.icon.setBackgroundColor(Color.BLUE);
         }
         else if (model.getRoute().equals("Green")) {
-            holder.icon.setBackgroundColor(Color.GREEN);
+            holder.icon.setBackgroundColor(Color.parseColor("#00cc00"));
         }
         else if (model.getRoute().equals("Orange")) {
-            holder.icon.setBackgroundColor(Color.parseColor("#ffa500"));
+            holder.icon.setBackgroundColor(Color.parseColor("#ff6600"));
         }
         else {
             holder.icon.setBackgroundColor(Color.parseColor("#ffff254c"));

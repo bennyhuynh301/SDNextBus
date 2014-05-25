@@ -1,5 +1,6 @@
 package com.phuchaihuynh.sdnextbus.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,9 +33,12 @@ import com.phuchaihuynh.sdnextbus.utils.GTFSRequest;
 import com.phuchaihuynh.sdnextbus.models.RouteModel;
 import com.phuchaihuynh.sdnextbus.utils.RoutesParser;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class RoutesFragments extends Fragment {
+public class RoutesFragment extends Fragment {
+
+    private final static String TAG = RoutesFragment.class.getName();
 
     private Spinner transportTypeSpinner;
     private Spinner transportRouteSpinner;
@@ -126,9 +131,9 @@ public class RoutesFragments extends Fragment {
     private final BroadcastReceiver tickReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK)==0) {
-            update();
-        }
+            if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK)==0) {
+                update();
+            }
         }
     };
 
@@ -152,6 +157,8 @@ public class RoutesFragments extends Fragment {
                     Toast.makeText(v.getContext(), text, Toast.LENGTH_LONG).show();
                     dbHelper.createFavorite(-1, id);
                 }
+                Log.d(TAG, "Add the transport to favorite");
+                onFavoriteSelectedListener.onFavoriteCheck();
             }
             else {
                 if (transportType.equals("Bus")) {
@@ -164,6 +171,8 @@ public class RoutesFragments extends Fragment {
                     Toast.makeText(v.getContext(), text, Toast.LENGTH_LONG).show();
                     dbHelper.deleteFavorite(dbHelper.getFavTrolleyRowId(id));
                 }
+                Log.d(TAG, "Remove the transport from favorite");
+                onFavoriteSelectedListener.onFavoriteUncheck();
             }
         }
     };
@@ -182,16 +191,16 @@ public class RoutesFragments extends Fragment {
         public void onClick(View view) {
             try {
                 stopId = dbHelper.getTransportStopId(transportTable,transportRoute,transportDirection,transportStop);
-                stopIdTextView.setText("Stop No. #" + stopId);
+                stopIdTextView.setText(stopId);
                 routeTextView.setText(transportRoute.toUpperCase());
                 if (transportRoute.equals("blue")) {
                     routeTextView.setBackgroundColor(Color.BLUE);
                 }
                 else if (transportRoute.equals("orange")) {
-                    routeTextView.setBackgroundColor(Color.parseColor("#ffa500"));
+                    routeTextView.setBackgroundColor(Color.parseColor("#ff6600"));
                 }
                 else if (transportRoute.equals("green")) {
-                    routeTextView.setBackgroundColor(Color.GREEN);
+                    routeTextView.setBackgroundColor(Color.parseColor("#00cc00"));
                 }
                 else {
                     routeTextView.setBackgroundColor(Color.parseColor("#ffff254c"));
@@ -305,6 +314,25 @@ public class RoutesFragments extends Fragment {
         }
     };
 
+    public interface OnFavoriteSelectedListener {
+        public void onFavoriteCheck();
+        public void onFavoriteUncheck();
+    }
+
+    private OnFavoriteSelectedListener onFavoriteSelectedListener;
+
+    @Override
+    public void onAttach(Activity activity) {
+        Log.d(TAG, "is onAttach");
+        super.onAttach(activity);
+        try {
+            onFavoriteSelectedListener = (OnFavoriteSelectedListener) activity;
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException((activity.toString() + "must implement RouteFragment.OnFavoriteSelectedListener"));
+        }
+    }
+
     private class AsyncCallWS extends AsyncTask<String, Void, Void> {
 
         private String textResult;
@@ -332,20 +360,36 @@ public class RoutesFragments extends Fragment {
                 timeTextView.setVisibility(View.VISIBLE);
                 return;
             }
+
             int count = 0;
+            ArrayList<String> times = new ArrayList<String>();
             for (RouteModel r : routes) {
                 if (r.getRoute().toLowerCase().equals(transportRoute)) {
-                    timeText += r.getArrivalTime();
+                    times.add(r.getArrivalTime());
                     count++;
-                    if (count < 2) {
-                        timeText += ", ";
-                    }
                 }
                 if (count == 2) {
                     break;
                 }
             }
-            timeText += " mins";
+
+            if (times.size() == 0) {
+                timeText = "No schedule at this time";
+                timeTextView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+                timeTextView.setGravity(Gravity.CENTER);
+                timeTextView.setText(timeText);
+                timeTextView.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < times.size(); i++) {
+                sb.append(times.get(i));
+                if (i != times.size()-1) {
+                    sb.append(",");
+                }
+            }
+            timeText = sb.toString() + " mins";
             timeTextView.setText(timeText);
             timeTextView.setVisibility(View.VISIBLE);
         }

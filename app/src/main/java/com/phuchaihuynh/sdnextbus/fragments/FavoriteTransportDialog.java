@@ -20,9 +20,12 @@ import com.phuchaihuynh.sdnextbus.models.RouteModel;
 import com.phuchaihuynh.sdnextbus.utils.GTFSRequest;
 import com.phuchaihuynh.sdnextbus.utils.RoutesParser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteTransportDialog extends DialogFragment {
+
+    private final static String TAG = FavoriteTransportDialog.class.getName();
 
     private TextView stopNameTextView;
     private TextView stopIdTextView;
@@ -68,10 +71,10 @@ public class FavoriteTransportDialog extends DialogFragment {
             routeTextView.setBackgroundColor(Color.BLUE);
         }
         else if (args.getString("transport_route").equals("green")) {
-            routeTextView.setBackgroundColor(Color.GREEN);
+            routeTextView.setBackgroundColor(Color.parseColor("#00cc00"));
         }
         else if (args.getString("transport_route").equals("orange")) {
-            routeTextView.setBackgroundColor(Color.parseColor("#ffa500"));
+            routeTextView.setBackgroundColor(Color.parseColor("#ff6600"));
         }
         else {
             routeTextView.setBackgroundColor(Color.parseColor("#ffff254c"));
@@ -163,10 +166,10 @@ public class FavoriteTransportDialog extends DialogFragment {
             }
 
             int count = 0;
-            String[] times = new String[3];
+            ArrayList<String> times = new ArrayList<String>();
             for (RouteModel r : routes) {
                 if (r.getRoute().toLowerCase().equals(args.getString("transport_route"))) {
-                    times[count] = r.getArrivalTime();
+                    times.add(r.getArrivalTime());
                     count++;
                 }
                 if (count == 2) {
@@ -174,13 +177,23 @@ public class FavoriteTransportDialog extends DialogFragment {
                 }
             }
 
+            if (times.size() == 0) {
+                timeText = "No schedule at this time";
+                timeTextView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+                timeTextView.setGravity(Gravity.CENTER);
+                timeTextView.setText(timeText);
+                timeTextView.setVisibility(View.VISIBLE);
+                return;
+            }
+
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < times.length; i++) {
-                if (times[i] != null) {
-                    sb.append(times[i]).append(",");
+            for (int i = 0; i < times.size(); i++) {
+                sb.append(times.get(i));
+                if (i != times.size()-1) {
+                    sb.append(",");
                 }
             }
-            timeText = sb.substring(0,sb.length()-2) + " mins";
+            timeText = sb.toString() + " mins";
             timeTextView.setText(timeText);
             timeTextView.setVisibility(View.VISIBLE);
         }

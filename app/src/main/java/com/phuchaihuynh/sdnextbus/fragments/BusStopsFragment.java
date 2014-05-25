@@ -1,5 +1,9 @@
 package com.phuchaihuynh.sdnextbus.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,7 +32,6 @@ public class BusStopsFragment extends Fragment {
     private TextView stopNameView;
     private TextView stopIdView;
     private TextView busNoticeView;
-    private TextView updateTimeView;
     private ListView routesView;
     private RelativeLayout rlLayoutLoading;
     private SearchView searchView;
@@ -36,7 +39,7 @@ public class BusStopsFragment extends Fragment {
 
     private InputMethodManager imm;
 
-    private static String busStopId;
+    private String busStopId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState) {
@@ -47,7 +50,6 @@ public class BusStopsFragment extends Fragment {
         stopNameView = (TextView) rootView.findViewById(R.id.bus_stop_name);
         stopIdView = (TextView) rootView.findViewById(R.id.bus_stop_id);
         busNoticeView = (TextView) rootView.findViewById(R.id.bus_notice);
-        updateTimeView = (TextView) rootView.findViewById(R.id.update_time);
         refreshIcon = (ImageButton) rootView.findViewById(R.id.refresh_icon);
         routesView = (ListView) rootView.findViewById(R.id.routes_list);
 
@@ -65,24 +67,45 @@ public class BusStopsFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+    }
+
+    public void onStop() {
+        super.onStop();
+        getActivity().unregisterReceiver(tickReceiver);
+    }
+
+    private final BroadcastReceiver tickReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK)==0) {
+                update();
+            }
+        }
+    };
+
     final ImageButton.OnClickListener imageButtonClickListener = new ImageButton.OnClickListener() {
 
         @Override
         public void onClick(View view) {
-            (new AsyncCallWS()).execute(BusStopsFragment.busStopId);
+            (new AsyncCallWS()).execute(busStopId);
         }
     };
 
     final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
 
         @Override
-        public boolean onQueryTextSubmit(String busStopId) {
-            if (busStopId.length() != 5 && !busStopId.matches("\\d+")) {
+        public boolean onQueryTextSubmit(String stopId) {
+            if (stopId.length() != 5 && !stopId.matches("\\d+")) {
                 return false;
             }
-            BusStopsFragment.busStopId = busStopId;
+            BusStopsFragment.this.busStopId = stopId;
             AsyncCallWS task = new AsyncCallWS();
-            task.execute(busStopId);
+            task.execute(stopId);
             imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
             searchView.setQuery("", false);
             searchView.clearFocus();
@@ -97,6 +120,12 @@ public class BusStopsFragment extends Fragment {
             return false;
         }
     };
+
+    private void update() {
+        if (busStopId != null) {
+            (new AsyncCallWS()).execute(busStopId);
+        }
+    }
 
     private class AsyncCallWS extends AsyncTask<String, Void, Void> {
 
@@ -117,7 +146,7 @@ public class BusStopsFragment extends Fragment {
             RoutesParser parser = new RoutesParser(textResult);
             parser.parse();
             stopNameView.setText(parser.getBusStopShortName());
-            stopIdView.setText("Bus stop no. " + stopId);
+            stopIdView.setText("Bus stop no. #" + stopId);
             if (parser.getNotice() != "") {
                 busNoticeView.setText(parser.getNotice());
                 busNoticeView.setVisibility(View.VISIBLE);
@@ -127,7 +156,6 @@ public class BusStopsFragment extends Fragment {
                 routesView.setAdapter(new RoutesListAdapter(getActivity(), routes));
             }
             refreshIcon.setVisibility(View.VISIBLE);
-            updateTimeView.setVisibility(View.VISIBLE);
         }
 
         @Override

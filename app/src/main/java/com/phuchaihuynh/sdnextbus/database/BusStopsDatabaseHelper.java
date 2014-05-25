@@ -20,7 +20,7 @@ import java.util.List;
 
 public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = "BusStopsDatabaseHelper";
+    private static final String TAG = BusStopsDatabaseHelper.class.getName();
 
     private static final int DATABASE_VERSION = 1;
 
@@ -148,6 +148,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TROLLEY_STOP_ID, trolley_stop_row_id);
         long id = db.insert(TABLE_FAVORITE, null, values);
         db.close();
+        Log.d(TAG, "Create favorite id: " + id);
         return id;
     }
 
@@ -155,6 +156,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READWRITE);
         db.delete(TABLE_FAVORITE, KEY_ID + " = ?", new String[] {String.valueOf(id)});
         db.close();
+        Log.d(TAG, "Remove favorite id: " + id);
     }
 
     public boolean isBusFavorite(long bus_id) {
@@ -162,11 +164,12 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
                 + " FROM " + TABLE_FAVORITE
                 + " WHERE " + KEY_BUS_STOP_ID + " = " + bus_id;
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
-        Log.d(TAG, selectQuery);
+        Log.d(TAG, "isBusFavorite Query: " + selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
         boolean isFav = c.moveToFirst();
         c.close();
         db.close();
+        Log.d(TAG, "isBusFavorite: " + isFav);
         return isFav;
     }
 
@@ -175,11 +178,12 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
                 + " FROM " + TABLE_FAVORITE
                 + " WHERE " + KEY_TROLLEY_STOP_ID + " = " + trolley_id;
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
-        Log.d(TAG, selectQuery);
+        Log.d(TAG, "isTrolleyFavorite Query: " +  selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
         boolean isFav = c.moveToFirst();
         c.close();
         db.close();
+        Log.d(TAG, "isTrolleyFavorite: " + isFav);
         return isFav;
     }
 
@@ -188,7 +192,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
                 + " FROM " + TABLE_FAVORITE
                 + " WHERE " + KEY_BUS_STOP_ID + " = " + bus_id;
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
-        Log.d(TAG, selectQuery);
+        Log.d(TAG, "getFavBusRowId Query: " + selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
         long id = -1;
         if (c.moveToFirst()) {
@@ -196,15 +200,16 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         db.close();
+        Log.d(TAG, "getFavBusRowId: " + id);
         return id;
     }
 
     public long getFavTrolleyRowId(long trolley_id) {
         String selectQuery = "SELECT " + KEY_ID
                 + " FROM " + TABLE_FAVORITE
-                + " WHERE " + KEY_BUS_STOP_ID + " = " + trolley_id;
+                + " WHERE " + KEY_TROLLEY_STOP_ID + " = " + trolley_id;
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
-        Log.d(TAG, selectQuery);
+        Log.d(TAG, "getFavTrolleyRowId Query: " + selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
         long id = -1;
         if (c.moveToFirst()) {
@@ -212,6 +217,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         db.close();
+        Log.d(TAG, "getFavTrolleyRowId: " + id);
         return id;
     }
 
@@ -220,7 +226,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT " + STOP_ID + ", " + STOP_NAME + ", " + ROUTE + ", " + DIRECTION
                 + " FROM " + TABLE_BUSES + ", " + TABLE_FAVORITE
                 + " WHERE " + TABLE_BUSES + "." + KEY_ID + " = " + TABLE_FAVORITE + "." + KEY_BUS_STOP_ID;
-        Log.d(TAG, selectQuery);
+        Log.d(TAG, "getAllBusesFavorites Query: " + selectQuery);
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
@@ -244,7 +250,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT " + STOP_ID + ", " + STOP_NAME + ", " + ROUTE + ", " + DIRECTION
                 + " FROM " + TABLE_TROLLEYS + ", " + TABLE_FAVORITE
                 + " WHERE " + TABLE_TROLLEYS + "." + KEY_ID + " = " + TABLE_FAVORITE + "." + KEY_TROLLEY_STOP_ID;
-        Log.d(TAG, selectQuery);
+        Log.d(TAG, "getAllTrolleysFavorites Query: " + selectQuery);
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
@@ -269,7 +275,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         String[] columns = {STOP_ID,STOP_NAME,ROUTE,DIRECTION};
         String selection = KEY_ID + " = " + id;
         String query = SQLiteQueryBuilder.buildQueryString(true,transportTable,columns,selection,null,null,null,null);
-        Log.d(TAG, "Get the stop info query: " + query);
+        Log.d(TAG, "getStopInfo Query: " + query);
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE,null,SQLiteDatabase.OPEN_READONLY);
         Cursor c = db.rawQuery(query,null,null);
         if (c.moveToFirst()) {
@@ -289,7 +295,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         String[] columns = {DIRECTION};
         String selection = ROUTE + " = " + "'" + transportRoute + "'";
         String query = SQLiteQueryBuilder.buildQueryString(true, transportTable, columns, selection, null, null, null, null);
-        Log.d(TAG, "Get transport direction query: " + query);
+        Log.d(TAG, "getTransportDirection Query: " + query);
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
         Cursor c = db.rawQuery(query, null, null);
         if (c.moveToFirst()) {
@@ -308,7 +314,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         String[] columns = {STOP_NAME};
         String selection = ROUTE + " = " + "'" + transportRoute + "' and " + DIRECTION + " = " + "'" + transportDirection + "'";
         String query = SQLiteQueryBuilder.buildQueryString(false,transportTable,columns,selection,null,null,null,null);
-        Log.d(TAG, "Get transport stops query: " + query);
+        Log.d(TAG, "getTransportStops Query: " + query);
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
         Cursor c = db.rawQuery(query, null, null);
         if (c.moveToFirst()) {
@@ -328,7 +334,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
                 + "' and " + DIRECTION + " = " + "'" + transportDirection
                 + "' and " + STOP_NAME + " = " + "'" + transportStop + "'";
         String query = SQLiteQueryBuilder.buildQueryString(false,transportTable,columes,selection,null,null,null,null);
-        Log.d(TAG, "Get transport stop id: " + query);
+        Log.d(TAG, "getTransportStopId Query: " + query);
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
         Cursor c = db.rawQuery(query, null, null);
         String stop_id = "";
@@ -337,6 +343,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         db.close();
+        Log.d(TAG, "Transport Stop Id: " + stop_id);
         return stop_id;
     }
 
@@ -344,7 +351,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         String[] columes = {KEY_ID};
         String selection = STOP_ID + " = " + "'" + stop_id + "' and " + ROUTE + " = " + "'" + transportRoute +"'";
         String query = SQLiteQueryBuilder.buildQueryString(false,transportTable,columes,selection,null,null,null,null);
-        Log.d(TAG, "Get transport row id: " + query);
+        Log.d(TAG, "getId Query: " + query);
         long id = -1;
         SQLiteDatabase db = SQLiteDatabase.openDatabase(MY_DATABASE, null, SQLiteDatabase.OPEN_READONLY);
         Cursor c = db.rawQuery(query, null, null);
@@ -353,6 +360,7 @@ public class BusStopsDatabaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         db.close();
+        Log.d(TAG, "Row id: " + id);
         return id;
     }
 }

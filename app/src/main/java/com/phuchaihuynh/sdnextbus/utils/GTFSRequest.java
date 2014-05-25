@@ -11,7 +11,7 @@ import org.ksoap2.transport.HttpTransportSE;
 
 public class GTFSRequest {
 
-    private static final String TAG = "[Dynamic_GTFS_Request]";
+    private static final String TAG = GTFSRequest.class.getName();
 
     private final String URL = "http://sdmts.ealert.ws/SDMTSChallenge.asmx";
     private final String NAMESPACE = "http://ealert.com/";

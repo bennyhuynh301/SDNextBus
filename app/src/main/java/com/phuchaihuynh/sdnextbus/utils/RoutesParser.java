@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class RoutesParser {
 
-    private final String TAG = "[RoutesParser]";
+    private final String TAG = RoutesParser.class.getName();
 
     private String text;
     private String busStopShortName;
@@ -28,7 +28,12 @@ public class RoutesParser {
         String pattern = "#?(.*)-(.*) to (.*)";
         Pattern r = Pattern.compile(pattern);
         String lines[] = this.text.split("\\n");
-        this.busStopShortName = lines[0];
+        if (lines[0].matches(".*invalid stop.*")) {
+            this.busStopShortName = "This stop is invalid";
+        }
+        else {
+            this.busStopShortName = lines[0].replace("&", " & ");
+        }
         Calendar curr = Calendar.getInstance();
         String nextTime, route, direction, arriveTime;
         for (int i = 1; i < lines.length; i++) {
@@ -43,6 +48,7 @@ public class RoutesParser {
             else {
                 if (!lines[i].equals("#=realtime")) {
                     this.notice = lines[i];
+                    break;
                 }
             }
         }

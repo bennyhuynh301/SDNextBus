@@ -16,7 +16,7 @@ import java.util.List;
 
 public class FavoritesListAdapter extends ArrayAdapter<FavoriteTransportModel> {
     private final Activity context;
-    private final List<FavoriteTransportModel> values;
+    private List<FavoriteTransportModel> values;
 
     static class ViewHolder {
         TextView icon;
@@ -29,6 +29,11 @@ public class FavoritesListAdapter extends ArrayAdapter<FavoriteTransportModel> {
         super(context, R.layout.fav_row, values);
         this.context = context;
         this.values = values;
+    }
+
+    public void updateDataSet(List<FavoriteTransportModel> values) {
+        this.values = values;
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -50,10 +55,10 @@ public class FavoritesListAdapter extends ArrayAdapter<FavoriteTransportModel> {
             holder.icon.setBackgroundColor(Color.BLUE);
         }
         else if (model.getRoute().equals("green")) {
-            holder.icon.setBackgroundColor(Color.GREEN);
+            holder.icon.setBackgroundColor(Color.parseColor("#00cc00"));
         }
         else if (model.getRoute().equals("orange")) {
-            holder.icon.setBackgroundColor(Color.parseColor("#ffa500"));
+            holder.icon.setBackgroundColor(Color.parseColor("#ff6600"));
         }
         else {
             holder.icon.setBackgroundColor(Color.parseColor("#ffff254c"));
