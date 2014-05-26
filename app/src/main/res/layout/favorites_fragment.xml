@@ -4,15 +4,14 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#333">
+        android:layout_height="fill_parent">
 
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="3dp"
-            android:background="#111">
+            android:layout_margin="7dp"
+            android:background="#fffbfbfb">
 
         <LinearLayout
                 android:orientation="vertical"
@@ -30,8 +29,8 @@
                     android:textSize="16sp"/>
             <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#FFFFFF"/>
+                    android:layout_height="2dp"
+                    android:background="#ffbababa"/>
             <ListView
                     android:id="@+id/fav_bus_list"
                     android:layout_width="match_parent"
@@ -62,8 +61,8 @@
                     android:textSize="16sp"/>
             <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#FFFFFF"/>
+                    android:layout_height="2dp"
+                    android:background="#ffbababa"/>
 
             <ListView
                     android:id="@+id/fav_trolley_list"

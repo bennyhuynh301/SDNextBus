@@ -31,6 +31,10 @@ public class RoutesParser {
         if (lines[0].matches(".*invalid stop.*")) {
             this.busStopShortName = "This stop is invalid";
         }
+        else if (lines[0].matches(".*No scheduled routed for this stop.*")) {
+            this.notice = "No scheduled routed for this stop";
+            return;
+        }
         else {
             this.busStopShortName = lines[0].replace("&", " & ");
         }
@@ -47,11 +51,12 @@ public class RoutesParser {
             }
             else {
                 if (!lines[i].equals("#=realtime")) {
-                    this.notice = lines[i];
-                    break;
+                    this.notice += lines[i];
                 }
             }
         }
+        Log.d(TAG, "Notice: " + this.notice);
+        Log.d(TAG, "List of transport models: " + models.toString());
     }
 
     public ArrayList<RouteModel> getRoutes() {

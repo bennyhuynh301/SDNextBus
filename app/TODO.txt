@@ -23,3 +23,5 @@
 17. Fav list onClicked (Done)
 
 18. Fix duplicated stop id (Done)
+
+19. Fix the Parser stop list...

@@ -3,30 +3,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#333">
+              android:layout_height="match_parent">
 
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#111"
-            android:layout_margin="3dp">
+            android:background="#fffbfbfb"
+            android:layout_margin="7dp">
 
         <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
+                android:background="#ffc3c3c3"
                 android:layout_weight="0.35">
             <RelativeLayout
                     android:id="@+id/search_result"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dip"
+                    android:layout_margin="3dip"
                     android:padding="5dp"
                     android:layout_alignParentTop="true"
-                    android:background="#ffffff"
+                    android:background="#fff"
                     android:layout_above="@+id/select_transport_form"
-                    android:visibility="invisible">
+                    android:visibility="visible">
 
                 <CheckBox
                         android:id="@+id/favorite_stop_checkbox"
@@ -34,30 +34,46 @@
                         android:layout_height="wrap_content"
                         android:scaleX="1.0"
                         android:scaleY="1.0"
-                        style="?android:attr/starStyle" android:layout_alignBottom="@+id/stop_id_layout"
+                        style="?android:attr/starStyle"
+                        android:layout_alignTop="@+id/stop_text_layout"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"/>
 
                 <LinearLayout
-                        android:id="@+id/stop_id_layout"
+                        android:id="@+id/stop_text_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical"
                         android:layout_toRightOf="@+id/favorite_stop_checkbox">
 
                     <TextView
+                            android:id="@+id/stop_name_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Stop ID: #"
-                            android:textSize="17sp"
+                            android:text="Stop Name"
+                            android:textSize="15sp"
                             android:textStyle="bold"/>
 
-                    <TextView
-                            android:id="@+id/stop_id_text"
+                    <LinearLayout
+                            android:id="@+id/stop_id_layout"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Stop ID"
-                            android:textColor="#ff646464"
-                            android:textSize="17sp"/>
+                            android:layout_height="wrap_content">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Stop ID: "
+                                android:textSize="12sp"
+                                android:textStyle="bold"/>
+
+                        <TextView
+                                android:id="@+id/stop_id_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Stop ID"
+                                android:textColor="#ff646464"
+                                android:textSize="12sp"/>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <TextView
@@ -75,6 +91,14 @@
                         android:text="Route"
                         android:gravity="center"/>
 
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/stop_text_layout"
+                        android:layout_marginTop="5dp"
+                        android:background="#ff0f53e6">
+                </LinearLayout>
+
                 <ProgressBar
                         android:id="@+id/loading_icon"
                         android:layout_width="wrap_content"
@@ -88,7 +112,7 @@
                         android:layout_centerInParent="true"
                         android:text="Time"
                         android:textColor="#000000"
-                        android:textSize="35sp"
+                        android:textSize="30sp"
                         android:textStyle="bold"
                         android:visibility="invisible"/>
 
@@ -102,6 +126,29 @@
                         android:background="#ffffff"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true" />
+
+                <LinearLayout
+                        android:id="@+id/direction_text_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_toLeftOf="@+id/refresh_icon"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Direction: "
+                            android:textStyle="bold"/>
+                    <TextView
+                            android:id="@+id/direction_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="........"
+                            android:singleLine="true"
+                            android:ellipsize="marquee"/>
+                </LinearLayout>
+
             </RelativeLayout>
         </LinearLayout>
 

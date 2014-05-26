@@ -70,6 +70,7 @@ public class FavoritesFragment extends Fragment implements UpdateableFragment {
 
     private OnFavoriteTransportSelectedListener favTransportListener;
     private OnFavoriteTransportLongSelectedListener favTransportLongListener;
+
     @Override
     public void onAttach(Activity activity) {
         Log.d(TAG, "is onAttach");

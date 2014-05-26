@@ -1,13 +1,14 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/background_window</item>
         <item name="android:actionBarStyle">@style/MyTheme.ActionBarTheme</item>
     </style>
 
-    <style name="MyTheme.ActionBarTheme" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">#ffff254c</item>
+    <style name="MyTheme.ActionBarTheme" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">#ff3f9fe0</item>
         <item name="android:titleTextStyle">@style/MyTheme.ActionBarTheme.TitleTextStyle</item>
     </style>
 

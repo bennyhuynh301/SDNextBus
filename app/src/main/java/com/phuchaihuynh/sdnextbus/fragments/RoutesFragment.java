@@ -57,6 +57,8 @@ public class RoutesFragment extends Fragment {
     private RelativeLayout searchResultLt;
     private TextView stopIdTextView;
     private TextView routeTextView;
+    private TextView stopNameTextView;
+    private TextView directionTextView;
     private TextView timeTextView;
     private ProgressBar loadingIcon;
     private CheckBox favoriteCheckbox;
@@ -80,6 +82,8 @@ public class RoutesFragment extends Fragment {
 
         searchResultLt = (RelativeLayout) rootView.findViewById(R.id.search_result);
         stopIdTextView = (TextView) rootView.findViewById(R.id.stop_id_text);
+        stopNameTextView = (TextView) rootView.findViewById(R.id.stop_name_text);
+        directionTextView = (TextView) rootView.findViewById(R.id.direction_text);
         routeTextView = (TextView) rootView.findViewById(R.id.transport_icon);
         timeTextView = (TextView) rootView.findViewById(R.id.transport_time_text);
 
@@ -191,7 +195,7 @@ public class RoutesFragment extends Fragment {
         public void onClick(View view) {
             try {
                 stopId = dbHelper.getTransportStopId(transportTable,transportRoute,transportDirection,transportStop);
-                stopIdTextView.setText(stopId);
+                stopIdTextView.setText("#"+stopId);
                 routeTextView.setText(transportRoute.toUpperCase());
                 if (transportRoute.equals("blue")) {
                     routeTextView.setBackgroundColor(Color.BLUE);
@@ -285,6 +289,7 @@ public class RoutesFragment extends Fragment {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             transportDirection = parent.getItemAtPosition(position).toString();
+            directionTextView.setText(transportDirection);
             try {
                 List<String> stops = dbHelper.getTransportStops(transportTable, transportRoute, transportDirection);
                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, stops);
@@ -306,6 +311,7 @@ public class RoutesFragment extends Fragment {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             transportStop = parent.getItemAtPosition(position).toString();
+            stopNameTextView.setText(transportStop);
         }
 
         @Override

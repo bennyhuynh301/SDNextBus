@@ -9,13 +9,20 @@ import com.phuchaihuynh.sdnextbus.fragments.RoutesFragment;
 
 public class TabsPagerAdapter extends FragmentStatePagerAdapter{
 
+    private final String[] TITLES = {"Favorites", "Routes", "Stops"};
+
     public TabsPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
     @Override
-    public Fragment getItem(int index) {
-        switch (index) {
+    public CharSequence getPageTitle(int position) {
+        return TITLES[position];
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        switch (position) {
             case 0:
                 return new FavoritesFragment();
             case 1:
@@ -28,7 +35,7 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter{
 
     @Override
     public int getCount() {
-        return 3;
+        return TITLES.length;
     }
 
     @Override

@@ -1,15 +1,14 @@
 package com.phuchaihuynh.sdnextbus.app;
 
-
 import android.database.SQLException;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 
+import android.util.Log;
+import android.util.TypedValue;
+import com.astuetz.PagerSlidingTabStrip;
 import com.phuchaihuynh.sdnextbus.adapter.TabsPagerAdapter;
 import com.phuchaihuynh.sdnextbus.database.BusStopsDatabaseHelper;
 import com.phuchaihuynh.sdnextbus.fragments.FavoriteTransportDialog;
@@ -20,59 +19,40 @@ import com.phuchaihuynh.sdnextbus.models.FavoriteTransportModel;
 
 import java.io.IOException;
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, FavoritesFragment.OnFavoriteTransportSelectedListener,
-                                        FavoritesFragment.OnFavoriteTransportLongSelectedListener,
-                                        RoutesFragment.OnFavoriteSelectedListener,
-                                        RemoveFavoriteDialog.OnRemoveFavoriteListener {
+public class MainActivity extends FragmentActivity implements FavoritesFragment.OnFavoriteTransportSelectedListener,
+                                  FavoritesFragment.OnFavoriteTransportLongSelectedListener,
+                                  RoutesFragment.OnFavoriteSelectedListener,
+                                  RemoveFavoriteDialog.OnRemoveFavoriteListener {
 
-    private static final String TAG = MainActivity.class.getName();
+    private final static String TAG = MainActivity.class.getName();
     private static final String DATABASE_NAME = "SanDiegoBusStops.sqlite";
 
+    private PagerSlidingTabStrip tabs;
     private ViewPager mViewPager;
-    private TabsPagerAdapter mAdapter;
-    private ActionBar actionBar;
+    private TabsPagerAdapter mPageAdapter;
 
-    private String[] tabs = {"Favorites", "Routes" ,"Bus Stops"};
-    private static final int FAVORITES = 0;
-    private static final int ROUTES = 1;
-    private static final int BUSSTOPS = 2;
+    private int color = 0xFF3F9FE0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize
+        tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
-        actionBar = getSupportActionBar();
+        mPageAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
-        mViewPager.setAdapter(mAdapter);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setHomeButtonEnabled(false);
+        mViewPager.setAdapter(mPageAdapter);
 
-        // Adding Tabs
-        for (String tab_name : tabs) {
-            actionBar.addTab(actionBar.newTab().setText(tab_name.toUpperCase()).setTabListener(this));
-        }
+        final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
 
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mViewPager.setPageMargin(pageMargin);
 
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                actionBar.setSelectedNavigationItem(position);
-            }
+        tabs.setShouldExpand(true);
+        tabs.setIndicatorColor(color);
 
-            @Override
-            public void onPageSelected(int position) {
+        tabs.setViewPager(mViewPager);
 
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
         // Create a database for the app
         BusStopsDatabaseHelper mDbHelper = new BusStopsDatabaseHelper(this);
@@ -92,21 +72,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        mViewPager.setCurrentItem(tab.getPosition(),false);
 
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
-    }
 
     @Override
     public void setOnFavoriteTransportClick(FavoriteTransportModel transportModel, String transportType) {
@@ -137,4 +103,5 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public void onRemoveClick() {
         mViewPager.getAdapter().notifyDataSetChanged();
     }
+
 }
