@@ -14,7 +14,7 @@
         android:background="#ffff254c"
         android:textColor="#ffffff"
         android:padding="1dp"
-        android:textSize="15sp"
+        android:textSize="13sp"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="Number"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:text="Bus direction"
-        android:textSize="16sp"
+        android:textSize="13sp"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/bus_icon" />
 
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Time"
-        android:textSize="16sp"
+        android:textSize="13sp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="6dip"

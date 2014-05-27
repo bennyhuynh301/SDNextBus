@@ -14,7 +14,7 @@
             android:background="#ffff254c"
             android:textColor="#ffffff"
             android:padding="1dp"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:ellipsize="marquee"
             android:singleLine="true"
             android:text="Number"
@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bus stop name"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 android:layout_alignParentTop="true"/>
         <TextView
@@ -38,14 +38,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="#00000"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:layout_below="@+id/fav_stop_name"/>
         <TextView
                 android:id="@+id/fav_direction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Direction"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:singleLine="true"
                 android:layout_below="@+id/fav_stop_id"/>
     </RelativeLayout>

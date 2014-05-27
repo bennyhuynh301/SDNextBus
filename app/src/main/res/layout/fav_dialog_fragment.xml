@@ -7,7 +7,7 @@
     <RelativeLayout
             android:id="@+id/fav_search_result_dialog"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:layout_margin="5dip"
             android:padding="5dp"
             android:layout_alignParentTop="true"
@@ -23,7 +23,7 @@
                     android:id="@+id/stop_name_text_dialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
                     android:text="Transport Stop Name"
                     android:textColor="#000000"/>
@@ -32,7 +32,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Stop ID: #"
+                    android:textSize="11sp"
+                    android:text="Stop ID: "
                     android:textStyle="bold"/>
 
                 <TextView
@@ -40,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Transport Stop ID"
-                    android:textSize="14sp"
+                    android:textSize="11sp"
                     android:paddingTop="2dp"/>
             </LinearLayout>
         </LinearLayout>
@@ -81,7 +82,7 @@
                 android:layout_centerInParent="true"
                 android:text="Time"
                 android:textColor="#000000"
-                android:textSize="43sp"
+                android:textSize="36sp"
                 android:textStyle="bold"
                 android:visibility="invisible"/>
 
@@ -109,8 +110,8 @@
 
         <ImageButton
                 android:id="@+id/refresh_icon_dialog"
-                android:layout_width="30dip"
-                android:layout_height="30dip"
+                android:layout_width="28dip"
+                android:layout_height="28dip"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
                 android:src="@drawable/ic_action_refresh"

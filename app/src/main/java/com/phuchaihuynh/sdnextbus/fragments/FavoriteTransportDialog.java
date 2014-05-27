@@ -66,7 +66,7 @@ public class FavoriteTransportDialog extends DialogFragment {
         args = getArguments();
         stopNameTextView.setText(args.getString("transport_stop_name"));
         stopNameTextView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-        stopIdTextView.setText(args.getString("transport_stop_id"));
+        stopIdTextView.setText("#" + args.getString("transport_stop_id"));
         if (args.getString("transport_route").equals("blue")) {
             routeTextView.setBackgroundColor(Color.BLUE);
         }

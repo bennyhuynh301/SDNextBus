@@ -146,7 +146,7 @@ public class BusStopsFragment extends Fragment {
             RoutesParser parser = new RoutesParser(textResult);
             parser.parse();
             stopNameView.setText(parser.getBusStopShortName());
-            stopIdView.setText("Bus stop no. #" + stopId);
+            stopIdView.setText("Stop ID. #" + stopId);
             if (!parser.getNotice().equals("")) {
                 busNoticeView.setText(parser.getNotice());
                 busNoticeView.setVisibility(View.VISIBLE);

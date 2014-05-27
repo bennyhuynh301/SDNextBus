@@ -64,7 +64,7 @@ public class FavoritesListAdapter extends ArrayAdapter<FavoriteTransportModel> {
             holder.icon.setBackgroundColor(Color.parseColor("#ffff254c"));
         }
         holder.stopName.setText(model.getStopName());
-        holder.stopId.setText("Stop no. #" + model.getStopId());
+        holder.stopId.setText("Stop ID. #" + model.getStopId());
         holder.direction.setText("Direction: " + model.getDirection());
         return convertView;
     }

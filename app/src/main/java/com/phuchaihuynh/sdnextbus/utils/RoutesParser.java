@@ -35,6 +35,10 @@ public class RoutesParser {
             this.notice = "No scheduled routed for this stop";
             return;
         }
+        else if (lines[0].matches(".*SD Bus Transit Alerts.*")) {
+            this.notice = lines[0];
+            return;
+        }
         else {
             this.busStopShortName = lines[0].replace("&", " & ");
         }
