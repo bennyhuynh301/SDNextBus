@@ -10,6 +10,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.phuchaihuynh.sdnextbus.adapter.TabsPagerAdapter;
 import com.phuchaihuynh.sdnextbus.database.BusStopsDatabaseHelper;
 import com.phuchaihuynh.sdnextbus.fragments.FavoriteTransportDialog;
@@ -80,6 +82,11 @@ public class MainActivity extends FragmentActivity implements FavoritesFragment.
         catch (SQLException e) {
             throw e;
         }
+
+        // Look up the AdView as a resource and load a request.
+        AdView adView = (AdView) this.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
     }
 
 
