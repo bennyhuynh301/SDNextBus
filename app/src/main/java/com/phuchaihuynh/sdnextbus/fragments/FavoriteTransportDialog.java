@@ -15,6 +15,8 @@ import android.view.*;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.phuchaihuynh.sdnextbus.app.R;
 import com.phuchaihuynh.sdnextbus.models.RouteModel;
 import com.phuchaihuynh.sdnextbus.utils.GTFSRequest;
@@ -86,6 +88,11 @@ public class FavoriteTransportDialog extends DialogFragment {
         refreshButton.setOnClickListener(onRefreshIconClickListener);
 
         update(args.getString("transport_stop_id"));
+
+        // Look up the AdView as a resource and load a request.
+        AdView adView = (AdView) rootView.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         return rootView;
     }
