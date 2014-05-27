@@ -50,8 +50,11 @@ public class RoutesParser {
                 this.models.add(new RouteModel(route, direction, arriveTime));
             }
             else {
-                if (!lines[i].equals("#=realtime")) {
-                    this.notice += lines[i];
+                if (lines[i].equals("#=realtime") || lines[i].equals(("For Padres games & MV Westfield Mall savings reply DEALS"))) {
+                    continue;
+                }
+                else {
+                    this.notice = lines[i];
                 }
             }
         }

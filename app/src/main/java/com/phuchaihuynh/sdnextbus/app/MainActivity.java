@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import com.astuetz.PagerSlidingTabStrip;
@@ -45,14 +46,23 @@ public class MainActivity extends FragmentActivity implements FavoritesFragment.
         mViewPager.setAdapter(mPageAdapter);
 
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
-
         mViewPager.setPageMargin(pageMargin);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        Log.d(TAG, "The screen width (px):" + metrics.widthPixels);
+        //Converting Screen resolution in pixels into dp
+        float dp_w = ( metrics.widthPixels * 160 ) / metrics.densityDpi;
+        Log.d(TAG, "The screen width (dp): " + dp_w);
+        if (dp_w <= 320) {
+            int textSize = 14;
+            tabs.setTextSize(textSize);
+        }
 
         tabs.setShouldExpand(true);
         tabs.setIndicatorColor(color);
 
         tabs.setViewPager(mViewPager);
-
 
         // Create a database for the app
         BusStopsDatabaseHelper mDbHelper = new BusStopsDatabaseHelper(this);

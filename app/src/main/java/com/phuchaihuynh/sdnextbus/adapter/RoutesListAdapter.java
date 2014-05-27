@@ -61,7 +61,7 @@ public class RoutesListAdapter extends ArrayAdapter<RouteModel> {
             holder.time.setTextColor(Color.RED);
         }
         else {
-            holder.time.setTextColor(Color.WHITE);
+            holder.time.setTextColor(Color.BLACK);
         }
         holder.time.setText(model.getArrivalTime() + " mins");
         return convertView;
