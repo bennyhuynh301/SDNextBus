@@ -2,13 +2,14 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:ads="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/fav_dialog_layout"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
     <RelativeLayout
             android:id="@+id/fav_search_result_dialog"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:layout_margin="5dip"
             android:padding="5dp"
             android:layout_alignParentTop="true"
@@ -33,7 +34,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Stop ID: #"
+                    android:text="Stop ID: "
                     android:textStyle="bold"/>
 
                 <TextView
@@ -62,12 +63,19 @@
                 android:gravity="center"/>
 
         <LinearLayout
+                android:id="@+id/divide_bar"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/stop_info_dialog"
                 android:layout_marginTop="5dp"
                 android:background="#ff0f53e6">
         </LinearLayout>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/divide_bar"
+                android:layout_above="@+id/transport_direction_layout">
 
         <ProgressBar
                 android:id="@+id/loading_icon_dialog"
@@ -82,9 +90,10 @@
                 android:layout_centerInParent="true"
                 android:text="Time"
                 android:textColor="#000000"
-                android:textSize="43sp"
+                android:textSize="37sp"
                 android:textStyle="bold"
                 android:visibility="invisible"/>
+        </RelativeLayout>
 
         <LinearLayout
                 android:id="@+id/transport_direction_layout"
@@ -120,7 +129,7 @@
                 android:layout_alignParentRight="true" />
     </RelativeLayout>
     <com.google.android.gms.ads.AdView android:id="@+id/adView"
-                                       android:layout_width="wrap_content"
+                                       android:layout_width="match_parent"
                                        android:layout_height="wrap_content"
                                        ads:adUnitId="ca-app-pub-5328076399999280/3486966651"
                                        ads:adSize="BANNER"/>

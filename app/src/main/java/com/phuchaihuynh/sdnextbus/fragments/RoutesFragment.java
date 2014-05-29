@@ -27,6 +27,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.phuchaihuynh.sdnextbus.app.R;
 import com.phuchaihuynh.sdnextbus.database.BusStopsDatabaseHelper;
 import com.phuchaihuynh.sdnextbus.utils.GTFSRequest;
@@ -97,6 +99,11 @@ public class RoutesFragment extends Fragment {
 
         refreshButton = (ImageButton) rootView.findViewById(R.id.refresh_icon);
         refreshButton.setOnClickListener(refreshOnClickedListener);
+
+        // Look up the AdView as a resource and load a request.
+        AdView adView = (AdView) rootView.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         return rootView;
     }

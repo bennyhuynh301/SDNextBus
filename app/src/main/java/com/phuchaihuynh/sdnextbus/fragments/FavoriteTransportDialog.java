@@ -10,6 +10,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.*;
 
 import android.widget.ImageButton;
@@ -90,10 +92,16 @@ public class FavoriteTransportDialog extends DialogFragment {
         update(args.getString("transport_stop_id"));
 
         // Look up the AdView as a resource and load a request.
-        AdView adView = (AdView) rootView.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
 
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int width = metrics.widthPixels;
+        Log.d(TAG, "Layout width: " + width + "px");
+        if (width > 480) {
+            AdView adView = (AdView) rootView.findViewById(R.id.adView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
         return rootView;
     }
 

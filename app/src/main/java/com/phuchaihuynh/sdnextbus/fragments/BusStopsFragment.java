@@ -19,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.phuchaihuynh.sdnextbus.adapter.RoutesListAdapter;
 import com.phuchaihuynh.sdnextbus.app.R;
 import com.phuchaihuynh.sdnextbus.utils.GTFSRequest;
@@ -63,6 +65,11 @@ public class BusStopsFragment extends Fragment {
         searchView.setOnQueryTextListener(queryTextListener);
 
         refreshIcon.setOnClickListener(imageButtonClickListener);
+
+        // Look up the AdView as a resource and load a request.
+        AdView adView = (AdView) rootView.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         return rootView;
     }

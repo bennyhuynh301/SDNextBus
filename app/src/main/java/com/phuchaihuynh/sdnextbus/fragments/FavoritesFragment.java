@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.phuchaihuynh.sdnextbus.adapter.FavoritesListAdapter;
 import com.phuchaihuynh.sdnextbus.app.R;
 import com.phuchaihuynh.sdnextbus.database.BusStopsDatabaseHelper;
@@ -50,6 +52,11 @@ public class FavoritesFragment extends Fragment implements UpdateableFragment {
         trolleyListView.setAdapter(trolleyListAdapter);
         trolleyListView.setOnItemClickListener(trolleyItemListener);
         trolleyListView.setOnItemLongClickListener(trolleyItemLongListener);
+
+        // Look up the AdView as a resource and load a request.
+        AdView adView = (AdView) rootView.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         return rootView;
     }
